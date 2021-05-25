@@ -42,6 +42,7 @@
 #include "wiced_bt_trace.h"
 #include "wiced_hal_gpio.h"
 #include "wiced_bt_stack.h"
+#include "wiced_timer.h"
 
 /******************************************************************************
  *                                Variables Definitions
@@ -50,6 +51,13 @@
                                   wiced_bt_management_evt_data_t *p_event_data);
 
  static void test_puart_driver(void);
+
+#if PUART_RTS_CTS_FLOW
+#if !defined(CYW20706A2)
+#error "Puart with RTS/CTS flow control demonstrated for CYW20706A2 device only."
+#endif
+static wiced_timer_t hal_puart_flow_timer;
+#endif
 
 /******************************************************************************
  *                                Function Definitions
@@ -75,9 +83,17 @@ APPLICATION_START ( )
     wiced_set_debug_uart(WICED_ROUTE_DEBUG_TO_PUART);
 #ifdef CYW20706A2
     wiced_hal_puart_init();
+  #if PUART_RTS_CTS_FLOW
+    // special setup to enable flow control pins
+    platform_puart_flow_control_pin_init();
+  #endif
     // Please see the User Documentation to reference the valid pins.
-    wiced_hal_puart_select_uart_pads( WICED_PUART_RXD, WICED_PUART_TXD, 0, 0);
-#elif CYW20735B1
+    // CTS and RTS are defined non-zero #if PUART_RTS_CTS_FLOW, see wiced_platform.h
+    if(!wiced_hal_puart_select_uart_pads( WICED_PUART_RXD, WICED_PUART_TXD, WICED_PUART_CTS, WICED_PUART_RTS))
+    {
+        WICED_BT_TRACE("wiced_hal_puart_select_uart_pads failed!!\n");
+    }
+#elif defined CYW20735B1 || defined CYW20835B1
     wiced_hal_puart_set_baudrate(115200);
 #else
     wiced_hal_puart_configuration(115200, PARITY_NONE, STOP_BIT_1);
@@ -140,17 +156,24 @@ void puart_rx_interrupt_callback(void* unused)
     /* There can be at most 16 bytes in the HW FIFO.*/
     uint8_t  readbyte=0;
 
-    if (TRUE == wiced_hal_puart_read( &readbyte ))
+    /* Drain rx and send to tx. We don't want to wait on tx and assume it won't be overrun (because RTS/CTS) */
+    while (wiced_hal_puart_rx_fifo_not_empty() && wiced_hal_puart_read(&readbyte))
     {
-        /* send one byte via the TX line. */
-        wiced_hal_puart_write( readbyte+1 );
+        readbyte += 1;
+        // this will wait for tx fifo empty before queueing byte
+        wiced_hal_puart_synchronous_write(&readbyte,1);
     }
-    else
-    {
-        WICED_BT_TRACE("PUART read failed!!\n\r");
-    }
+    #if !PUART_RTS_CTS_FLOW
+    wiced_hal_puart_reset_puart_interrupt( );
+    #endif
+}
+
+#if PUART_RTS_CTS_FLOW
+void puart_allow_interrupt()
+{
     wiced_hal_puart_reset_puart_interrupt( );
 }
+#endif
 
 /**
  Function Name:
@@ -166,10 +189,15 @@ void puart_rx_interrupt_callback(void* unused)
  */
 void test_puart_driver( void )
 {
-    /* Turn off flow control */
+    /* Set flow control */
+    #if PUART_RTS_CTS_FLOW
+    wiced_hal_puart_flow_on();
+    #else
     wiced_hal_puart_flow_off();
+    #endif
 
     /* BEGIN - puart interrupt */
+    wiced_hal_puart_reset_puart_interrupt();
     wiced_hal_puart_register_interrupt(puart_rx_interrupt_callback);
 #ifndef CYW20706A2
     wiced_hal_puart_set_watermark_level(1);
@@ -180,4 +208,16 @@ void test_puart_driver( void )
     wiced_hal_puart_print( "Type something! "
             "Keystrokes are echoed to the terminal ...\r\n");
 
+    #if PUART_RTS_CTS_FLOW
+    wiced_hal_puart_print( "Using hardware flow control to limit data transfer buffer\r\n");
+
+    /* Start a periodic timer to so data transfer is delayed */
+    if(wiced_init_timer( &hal_puart_flow_timer, puart_allow_interrupt, 0, WICED_SECONDS_PERIODIC_TIMER) == WICED_SUCCESS)
+    {
+        if(wiced_start_timer( &hal_puart_flow_timer, 1) != WICED_SUCCESS)
+        {
+            wiced_hal_puart_print( "error starting flow control timer\r\n");
+        }
+    }
+    #endif
 }
