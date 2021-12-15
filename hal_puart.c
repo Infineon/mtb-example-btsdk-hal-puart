@@ -93,13 +93,9 @@ APPLICATION_START ( )
     {
         WICED_BT_TRACE("wiced_hal_puart_select_uart_pads failed!!\n");
     }
-#elif defined CYW20735B1 || defined CYW20835B1
-    wiced_hal_puart_set_baudrate(115200);
 #else
     wiced_hal_puart_configuration(115200, PARITY_NONE, STOP_BIT_1);
 #endif
-
-
     WICED_BT_TRACE("*************Starting PUART Application**********\n\r");
 
     /* Register BT stack callback*/
@@ -212,12 +208,7 @@ void test_puart_driver( void )
     wiced_hal_puart_print( "Using hardware flow control to limit data transfer buffer\r\n");
 
     /* Start a periodic timer to so data transfer is delayed */
-    if(wiced_init_timer( &hal_puart_flow_timer, puart_allow_interrupt, 0, WICED_SECONDS_PERIODIC_TIMER) == WICED_SUCCESS)
-    {
-        if(wiced_start_timer( &hal_puart_flow_timer, 1) != WICED_SUCCESS)
-        {
-            wiced_hal_puart_print( "error starting flow control timer\r\n");
-        }
-    }
+    wiced_init_timer( &hal_puart_flow_timer, puart_allow_interrupt, 0, WICED_SECONDS_PERIODIC_TIMER);
+    wiced_start_timer( &hal_puart_flow_timer, 1);
     #endif
 }
