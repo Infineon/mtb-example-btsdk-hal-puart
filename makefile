@@ -1,5 +1,5 @@
 #
-# Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+# Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
 # an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 #
 # This software, including source code, documentation and related
@@ -62,13 +62,13 @@ SUPPORTED_TARGETS = \
   CYBT-483056-EVAL \
   CYBT-483062-EVAL \
   CYW989820EVB-01 \
-  CYW920721B2EVK-02 \
   CYW920719B2Q40EVB-01 \
   CYW920706WCDEVAL \
   CYBT-343026-EVAL \
   CYBT-333047-EVAL \
   CYBT-343052-EVAL \
-  CYW920735Q60EVB-01
+  CYW920735Q60EVB-01 \
+  CYW920820M2EVB-01
 
 #
 # Advanced Configuration
@@ -113,12 +113,6 @@ endif
 # Components (middleware libraries)
 #
 COMPONENTS +=bsp_design_modus
-
-ifneq ($(filter CYW920721B2EVK-02,$(TARGET)),)
-# use app specific design.modus
-DISABLE_COMPONENTS+=bsp_design_modus
-COMPONENTS+=CYW920721B2EVK-02_design_modus
-endif
 
 ################################################################################
 # Paths
