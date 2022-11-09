@@ -68,9 +68,9 @@ static wiced_timer_t hal_puart_flow_timer;
 
  Function Description:
  @brief    Starting point of your application. Entry point to the application.
-           Set device configuration and start BT stack initialization.
+           Set device configuration and start Bluetooth stack initialization.
            The actual application initialization will happen when stack reports
-           that BT device is ready.
+           that Bluetooth device is ready.
 
  @param void
 
@@ -98,7 +98,7 @@ APPLICATION_START ( )
 #endif
     WICED_BT_TRACE("*************Starting PUART Application**********\n\r");
 
-    /* Register BT stack callback*/
+    /* Register Bluetooth stack callback*/
     result = wiced_bt_stack_init(puart_app_management_cback, NULL, NULL);
     if(WICED_BT_SUCCESS != result)
     {
