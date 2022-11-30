@@ -12,7 +12,7 @@ The RTS/CTS hardware flow control is also demonstrated for the CYW920706WCDEVAL 
 
 - **Programming Language:** C
 
-- **Associated Parts**: [CYW20819](https://www.infineon.com/dgdl/Infineon-CYW20819_Ultra_Low_Power_Bluetooth_LE_BR_EDR_Bluetooth_5.0_SoC-AdditionalTechnicalInformation-v07_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0ee7dba070bf), [CYW20820](https://www.infineon.com/dgdl/Infineon-CYW20820_Ultra_Low_Power_Bluetooth_LE_BR_EDR_Bluetooth_5.0_SoC-AdditionalTechnicalInformation-v06_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0ee7e70770d1), [CYW20719](https://www.infineon.com/dgdl/Infineon-CYW20719B2KUMLGT-DataSheet-v07_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0ee7edf470db0-soc)
+- **Associated Parts**: [CYW20819](https://www.infineon.com/cms/en/product/wireless-connectivity/airoc-bluetooth-le-bluetooth-multiprotocol/airoc-bluetooth-le-bluetooth/cyw20819/), [CYW20820](https://www.infineon.com/cms/en/product/wireless-connectivity/airoc-bluetooth-le-bluetooth-multiprotocol/airoc-bluetooth-le-bluetooth/cyw20820/), [CYW20719](https://www.infineon.com/cms/en/product/wireless-connectivity/airoc-bluetooth-le-bluetooth-multiprotocol/airoc-bluetooth-le-bluetooth/cyw20719/)
 
 ## Supported Kits
 
@@ -44,9 +44,9 @@ Refer to `README` in repo root folder for instruction on how to build and progra
 | **Code Examples** |
 |Visit the BTSDK code examples repository in Infineon GitHub portal for a comprehensive collection of code examples using ModusToolbox&#8482;|
 |**Device Documentation**|
-|[CYW20819 Device Datasheet](https://www.infineon.com/dgdl/Infineon-CYW20819_Ultra_Low_Power_Bluetooth_LE_BR_EDR_Bluetooth_5.0_SoC-AdditionalTechnicalInformation-v07_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0ee7dba070bf)|
-|[CYW20820 Device Datasheet](https://www.infineon.com/dgdl/Infineon-CYW20820_Ultra_Low_Power_Bluetooth_LE_BR_EDR_Bluetooth_5.0_SoC-AdditionalTechnicalInformation-v06_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0ee7e70770d1)|
-|[CYW20719 Device Datasheet](https://www.infineon.com/dgdl/Infineon-CYW20719B2KUMLGT-DataSheet-v07_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0ee7edf470db0-soc)|
+|[CYW20819 Device Datasheet](https://www.infineon.com/dgdl/Infineon-CYW20819-DataSheet-v08_00-EN.pdf?fileId=8ac78c8c82ce56640182f7f3c7237135)|
+|[CYW20820 Device Datasheet](https://www.infineon.com/dgdl/Infineon-CYW20820-DataSheet-v01_00-EN.pdf?fileId=8ac78c8c8412f8d301843310af461e24)|
+|[CYW20719 Device Datasheet](https://www.infineon.com/dgdl/Infineon-CYW20719B2KUMLGT-DataSheet-v07_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0ee7edf470db)|
 |**Development Kits** |
 |[CYW920819EVB-02 Evaluation Kit](https://www.infineon.com/cms/en/product/evaluation-boards/cyw920819evb-02/)|
 |[CYW920820EVB-02 Evaluation Kit]( https://www.infineon.com/cms/en/product/wireless-connectivity/airoc-bluetooth-le-bluetooth-multiprotocol/)|
@@ -73,7 +73,7 @@ Application settings below are common for all BTSDK applications and can be conf
 > Set to the UART port you want to use to download the application. For example 'COM6' on Windows or '/dev/ttyWICED\_HCI\_UART0' on Linux or '/dev/tty.usbserial-000154' on macOS. By default, the SDK will auto-detect the port.
 
 ##### ENABLE_DEBUG
-> For HW debugging, configure ENABLE\_DEBUG=1. See the document [AIROC&#8482;-Hardware-Debugging](https://github.com/Infineon/btsdk-docs/blob/master/docs/BT-SDK/WICED-Hardware-Debugging.pdf) for more information. This setting configures GPIO for SWD.<br>
+> For HW debugging, configure ENABLE\_DEBUG=1. See the document [AIROC&#8482;-Hardware-Debugging](https://infineon.github.io/btsdk-docs/BT-SDK/AIROC-Hardware-Debugging.pdf) for more information. This setting configures GPIO for SWD.<br>
 >
    - CYW920819EVB-02/CYW920820EVB-02: SWD signals are shared with D4 and D5, see SW9 in schematics.
    - CYBT-213043-MESH/CYBT-213043-EVAL/CYBT-253059-EVAL: SWD signals are routed to P12=SWDCK and P13=SWDIO. Use expansion connectors to connect VDD, GND, SWDCK, and SWDIO to your SWD Debugger probe.
